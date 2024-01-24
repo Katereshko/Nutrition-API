@@ -1,38 +1,151 @@
+html, body{
+  margin: 0;
+}
+
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 .App {
-  text-align: center;
+  background-color: rgba(163, 117, 55, 0.5);
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.recipeCard{
+  margin-bottom: 30px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.search {
+  width: 100%;
+  padding: 20px 40px;
+  background-color: rgba(163, 117, 55, 0.5);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 0px 4px #ddd6e8;
+}
+
+.list{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  padding: 20px;
+  background-image: url("notebook-paper.jpg");
+  background-size: cover;
+  width: 70%;
+  border-radius: 10px;
+}
+
+li{
+  background-color: rgba(208, 189, 170, 0.5);
+  padding: 10px 60px 10px 10px;
+  margin: 10px 10px 10px 60px;
+  border-radius: 10px;
+  font-family: 'Open Sans', sans-serif;
+  list-style: none;
+  font-size: 24px;
+  color: #2f1d16;
+}
+
+.calories, .cuisine, .diet{
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.calories{
+  background-color: #aebb35;
+  margin-bottom: 0;
+}
+
+.cuisine{
+  background-color: #2f1d16;
+  color: #fff;
+}
+
+.diet{
+  background-color: pink;
+  color: #fff;
+  margin: 0 30px;
+}
+
+.categories{
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.icon{
+  width: 30px;
+  box-shadow: none;
+  margin-right: 30px;
+}
+
+button {
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 2px solid white;
+  background-color: #a37537;
+  padding: 20px 50px;
+  cursor: pointer;
+}
+
+img{
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7), 0 6px 20px 0 rgba(0, 0, 0, 0.7);
+}
+
+h1{
+  background-color: #aebb35;
   color: white;
+  font-size: 60px;
+  padding: 20px 60px;
+  border-radius: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+h2{
+  background-color: #2f1d16;
+  color: white;
+  font-size: 30px;
+  padding: 20px 70px;
+  border-radius: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+form{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+}
+
+@media all and (max-width: 500px){
+  h1{
+    font-size: 40px;
+    padding: 16px 40px;
   }
-  to {
-    transform: rotate(360deg);
+
+  h2{
+    font-size: 20px;
+    padding: 16px 30px;
+  }
+
+  li{
+    padding: 10px;
+    margin: 10px;
+    font-size: 18px;
+  }
+}
+
+@media all and (max-width: 340px){
+  h1, h2{
+    text-align: center;
   }
 }
