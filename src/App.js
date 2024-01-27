@@ -1,68 +1,101 @@
-import './App.css';
 import { useState, useEffect } from "react";
-import MyRecipesComponents from "./MyRecipesComponents"
-import video from "./food.mp4";
+import NutritionRow from "./NutritionRow";
+import LoaderPage from "./Loader/LoaderPage";
+import "./App.css"
+import Swal from "sweetalert2";
 
 function App() {
 
-  const MY_ID = "9ae4a1d4";
-  const MY_KEY = "1c04f706235d8558b8cd0de870e75c87";
+  const my_id = '1059b9da';
+  const my_key = '56844abc86b2d5f3adda77b0aba8cf7c';
+  const url = 'https://api.edamam.com/api/nutrition-details';
 
   const [mySearch, setMySearch] = useState("");
-  const [myRecipes, setMyRecipes] = useState([]);
-  const [wordSubmit, setWordSubmit] = useState("avocado");
+  const [wordSubmit, setWordSubmit] = useState("1 banana");
+  const [nutrition, setNutrition] = useState("");
+
+  const [stateLoader, setStateLoader] = useState(false);
 
   useEffect( () => {
-    const getRecipe = async () => {
-      const response = await fetch(`https://api.edamam.com/api/recipes/v2?type=public&q=${wordSubmit}&app_id=${MY_ID}&app_key=${MY_KEY}`);
-      const data = await response.json();
-      setMyRecipes(data.hits);
+    if (wordSubmit !== '') {
+      let ingr = wordSubmit.split(/[,,;,\n]/);
+      fetchData(ingr);
     }
-    getRecipe()
-  }, [wordSubmit]);
+  }, [wordSubmit])
 
-  const myRecipeSearch = (e) => {
+  async function fetchData (ingr) {
+    setStateLoader(true);
+
+    const response = await fetch(`${url}?app_id=${my_id}&app_key=${my_key}`, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ingr: ingr })
+    })
+
+    if(response.ok) {
+      setStateLoader(false);
+      const result = await response.json();
+      setNutrition(result);
+    } else {
+      setStateLoader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please enter ingredients correctly"
+      });
+    }
+  }
+
+  const ingredientSearch = (e) => {
     setMySearch(e.target.value);
   }
 
-  const finalSearch = (e) =>{
+  const finalSearch = (e) => {
     e.preventDefault();
     setWordSubmit(mySearch);
   }
 
   return (
     <div className="App">
+      {stateLoader && <LoaderPage />} 
 
       <div className="container">
-        <video autoPlay muted loop>
-          <source src={video} type="video/mp4" />
-        </video>
-        <h1>Find a Recipe</h1>
+        <h1>Nutrition Analysis</h1>
+        <h2>Find out the exact nutritional value of your food!</h2>
       </div>
 
-      <div className='container'>
-        <form onSubmit={finalSearch}>
-          <input className="search" placeholder="Search..." onChange={myRecipeSearch} value={mySearch}/>
+      <div className="form-container">
+        <form className="container" onSubmit={finalSearch}> 
+          <input
+            placeholder="Search..."
+            onChange={ingredientSearch}
+          />
+          <button onClick={finalSearch}>Search</button>
         </form>
       </div>
 
-      <div className='container'>
-        <button onClick={finalSearch}>
-          <img src="https://img.icons8.com/fluency/48/000000/fry.png" alt="icon"/>
-        </button>
+      <div className="container united-data">
+        {
+          nutrition && <p className="search-display">You're searching for: {wordSubmit}</p>
+        }
+        {
+          nutrition && <p>{nutrition.calories} kcal</p>
+        }
+        {
+          nutrition && Object.values(nutrition.totalNutrients)
+            .map(({ label, quantity, unit }, index) =>
+              <NutritionRow
+                key={index}
+                label={label}
+                quantity={quantity}
+                unit={unit}
+              />
+            )
+        }
       </div>
-
-      {myRecipes.map((element, index) => (
-        <MyRecipesComponents
-        key={index}
-        label={element.recipe.label} 
-        image={element.recipe.image} 
-        calories={element.recipe.calories} 
-        ingredients={element.recipe.ingredientLines}
-        cuisine={element.recipe.cuisineType}
-        diet={element.recipe.dietLabels}/>
-      ))}
-
     </div>
   );
 }
