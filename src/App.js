@@ -64,7 +64,7 @@ function App() {
 
       <div className="container">
         <h1>Nutrition Analysis</h1>
-        <h2>Find out the exact nutritional value of your food!</h2>
+        <h2 className="description">Find out the exact nutritional value of your food!</h2>
       </div>
 
       <div className="form-container">
